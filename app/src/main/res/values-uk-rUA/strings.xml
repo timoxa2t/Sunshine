@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Сонечко</string>
+
+
+    <string name="action_map">Позииція на карті</string>
+    <string name="action_share">Поділитися</string>
+
+    <string name="action_settings">Налаштування</string>
+
+    <string name="action_refresh">Оновити</string>
+
+    <string name="title_activity_detail">Деталі</string>
+    <string name="title_activity_settings">Налаштування</string>
+
+
+
+    <string name="pref_location_label">Місцезнаходження</string>
+
+
+    <!-- Key name for storing location in SharedPreferences -->
+    <string name="pref_location_key" translatable="false">location</string>
+
+    <!-- Default postal code for location preference -->
+    <string name="pref_location_default" translatable="false">lviv, lviv oblast ukraine 79000</string>
+
+    <!-- Label for the temperature units preference -->
+    <string name="pref_units_label">Одиниці вимірювання температури</string>
+
+    <!-- Label for metric option in temperature unit preference -->
+    <string name="pref_units_label_metric">Градуси Цельсія</string>
+
+    <!-- Label for imperial option in temperature unit preference -->
+    <string name="pref_units_label_imperial">По Фаренгейту</string>
+
+    <!-- Key name for temperature unit preference in SharedPreferences -->
+    <string name="pref_units_key" translatable="false">units</string>
+
+    <!-- Value in SharedPreferences for metric temperature unit option -->
+    <string name="pref_units_metric" translatable="false">metric</string>
+
+    <!-- Value in SharedPreferences for imperial temperature unit option -->
+    <string name="pref_units_imperial" translatable="false">imperial</string>
+
+    <!-- Strings related to Notification Enabled preference -->
+    <string name="pref_enable_notifications_key" translatable="false">enable_notifications</string>
+    <string name="pref_enable_notifications_label">Увідомленя про погоду</string>
+
+    <string name="pref_enable_notifications_true">Включено</string>
+    <string name="pref_enable_notifications_false">Не включено</string>
+
+    <string name="pref_last_notification">last_notification</string>
+
+
+
+    <string name="today">Сьогодні</string>
+
+    <string name="tomorrow">Завтра</string>
+
+    <string name="format_full_friendly_date">
+        <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
+    </string>
+
+
+
+    <!-- - - - - - - - - - - - - - - - -
+      - Used by SunshineWeatherUtils   -
+      - - - - - - - - - - - - - - - - -->
+
+    <!-- Temperature format -->
+    <string name="format_temperature">
+        <xliff:g id="temp">%1.0f</xliff:g>\u00B0
+    </string>
+
+    <string name="wind_label">Вітер</string>
+    <!-- Wind in kph -->
+    <string name="format_wind_kmh">
+        <xliff:g id="speed">%1$1.0f</xliff:g> km/h
+        <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <!-- Wind in mph -->
+    <string name="format_wind_mph">
+        <xliff:g id="speed">%1$1.0f</xliff:g> mph
+        <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <string name="pressure_label">Атмосферний тиск</string>
+    <!-- Pressure format -->
+    <string name="format_pressure">
+        <xliff:g id="pressure">%1.0f</xliff:g> hPa
+    </string>
+
+    <string name="humidity_label">Вологість повітря</string>
+    <!-- Humidity format -->
+    <string name="format_humidity">
+        <xliff:g id="humidity">%1.0f</xliff:g> %%
+    </string>
+
+    <string name="condition_2xx">Шторм</string>
+    <string name="condition_3xx">Дощ</string>
+    <string name="condition_500">Слабкий дощ</string>
+    <string name="condition_501">Нормальний дощ</string>
+    <string name="condition_502">Сильний Дощ</string>
+    <string name="condition_503">Дуже сильний дощ</string>
+    <string name="condition_504">Екстримальний дощ</string>
+    <string name="condition_511">Холодний дощ</string>
+    <string name="condition_520">Легка злива</string>
+    <string name="condition_521">Злива</string>
+    <string name="condition_522">Сильна злива</string>
+    <string name="condition_531">Тріпка злива</string>
+    <string name="condition_600">Сніжок</string>
+    <string name="condition_601">Сніг</string>
+    <string name="condition_602">Снігопад</string>
+    <string name="condition_611">Сніг і дощ</string>
+    <string name="condition_612">Злива і дощ</string>
+    <string name="condition_615">Сніг і дощ</string>
+    <string name="condition_616">Сніг і дощ</string>
+    <string name="condition_620">Сильний снігопад</string>
+    <string name="condition_621">Сильний снігопад</string>
+    <string name="condition_622">Сильний снігопад</string>
+    <string name="condition_701">Туман</string>
+    <string name="condition_711">Дим</string>
+    <string name="condition_721">Туман, Серпанок</string>
+    <string name="condition_731">Пісок, пилюка</string>
+    <string name="condition_741">Туман</string>
+    <string name="condition_751">Пісок</string>
+    <string name="condition_761">Пилюка</string>
+    <string name="condition_762">Вулканічна пиль</string>
+    <string name="condition_771">Шквал</string>
+    <string name="condition_781">Торнадо</string>
+    <string name="condition_800">Сонячно</string>
+    <string name="condition_801">Майже сонячно</string>
+    <string name="condition_802">Трошки хмарно</string>
+    <string name="condition_803">Хмарно</string>
+    <string name="condition_804">Дуже хмарно</string>
+    <string name="condition_900">Торнадо</string>
+    <string name="condition_901">Тропічний шторм</string>
+    <string name="condition_902">Ураган</string>
+    <string name="condition_903">Холодно</string>
+    <string name="condition_904">Жарко</string>
+    <string name="condition_905">Вітряно</string>
+    <string name="condition_906">Град</string>
+    <string name="condition_951">Тихо</string>
+    <string name="condition_952">Легкий вітерець</string>
+    <string name="condition_953">Делікатний вітерець</string>
+    <string name="condition_954">Вітерець</string>
+    <string name="condition_955">Освіжаючий вітерець</string>
+    <string name="condition_956">Сильний вітерець</string>
+    <string name="condition_957">Високий вітер</string>
+    <string name="condition_958">Шторм</string>
+    <string name="condition_959">Сильний шторм</string>
+    <string name="condition_960">Шторм</string>
+    <string name="condition_961">Жорстокий шторм</string>
+    <string name="condition_962">Ураган</string>
+
+    <string name="condition_unknown">Непонятно (<xliff:g id="conditionId">%1$d</xliff:g>)</string>
+
+
+
+
+    <string name="a11y_forecast">Прогноз: <xliff:g id="condition">%1$s</xliff:g></string>
+    <string name="a11y_forecast_icon">Зображення погоди: <xliff:g id="condition">%1$s</xliff:g></string>
+    <string name="a11y_high_temp">Найбільша температура: <xliff:g id="high">%1$s</xliff:g></string>
+    <string name="a11y_low_temp">Найменша температура: <xliff:g id="low">%1$s</xliff:g></string>
+    <string name="a11y_humidity">Відносна вологість повітря: <xliff:g id="humidity">%1$s</xliff:g></string>
+    <string name="a11y_pressure">Атмосферний тиск: <xliff:g id="pressure">%1$s</xliff:g></string>
+    <string name="a11y_wind">Швидкість та напрям вітру: <xliff:g id="wind">%1$s</xliff:g></string>
+
+
+
+    <!-- Used by NotificationUtils -->
+
+    <!-- The format of the notification we show when the weather is updated -->
+    <string name="format_notification">
+        Forecast:<xliff:g id="condition">%1$s</xliff:g> -
+        High:<xliff:g id="high">%2$s</xliff:g>
+        Low:<xliff:g id="low">%3$s</xliff:g>
+    </string>
+</resources>
