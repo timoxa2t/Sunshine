@@ -52,7 +52,7 @@ public final class NetworkUtils {
 
 
     private static final String API_KEY_PARAM = "APPID";
-    private static final String API_KEY = "6e365cd354b5673fe69de5bd1a2c1807";
+    private static final String API_KEY = "<My key>";
     /* The format we want our API to return */
     private static final String format = "json";
     /* The units we want our API to return */
