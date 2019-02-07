@@ -17,6 +17,7 @@ package com.example.android.sunshine.utilities;
 
 import android.content.Context;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.example.android.sunshine.R;
 
@@ -186,7 +187,7 @@ public final class SunshineDateUtils {
      * @return A user-friendly representation of the date such as "Today, June 8", "Tomorrow",
      * or "Friday"
      */
-    public static String getFriendlyDateString(Context context, long normalizedUtcMidnight, boolean showFullDate) {
+    public static String getFriendlyDateString(Context context, long localDate, boolean showFullDate) {
 
         /*
          * NOTE: localDate should be localDateMidnightMillis and should be straight from the
@@ -196,7 +197,6 @@ public final class SunshineDateUtils {
          * that normalized date and produce a date (in UTC time) that represents the local time
          * zone at midnight.
          */
-        long localDate = getLocalMidnightFromNormalizedUtcDate(normalizedUtcMidnight);
 
         /*
          * In order to determine which day of the week we are creating a date string for, we need
@@ -281,7 +281,10 @@ public final class SunshineDateUtils {
         long daysFromEpochToProvidedDate = elapsedDaysSinceEpoch(dateInMillis);
         long daysFromEpochToToday = elapsedDaysSinceEpoch(System.currentTimeMillis());
 
+
+
         int daysAfterToday = (int) (daysFromEpochToProvidedDate - daysFromEpochToToday);
+
 
         switch (daysAfterToday) {
             case 0:

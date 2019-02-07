@@ -48,6 +48,7 @@ public class DetailActivity extends AppCompatActivity implements
      * weather display.
      */
     public static final String[] WEATHER_DETAIL_PROJECTION = {
+            WeatherContract.WeatherEntry._ID,
             WeatherContract.WeatherEntry.COLUMN_DATE,
             WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
             WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
@@ -63,14 +64,15 @@ public class DetailActivity extends AppCompatActivity implements
      * to access the data from our query. If the order of the Strings above changes, these
      * indices must be adjusted to match the order of the Strings.
      */
-    public static final int INDEX_WEATHER_DATE = 0;
-    public static final int INDEX_WEATHER_MAX_TEMP = 1;
-    public static final int INDEX_WEATHER_MIN_TEMP = 2;
-    public static final int INDEX_WEATHER_HUMIDITY = 3;
-    public static final int INDEX_WEATHER_PRESSURE = 4;
-    public static final int INDEX_WEATHER_WIND_SPEED = 5;
-    public static final int INDEX_WEATHER_DEGREES = 6;
-    public static final int INDEX_WEATHER_CONDITION_ID = 7;
+    public static final int INDEX_WEATHER_DATE = 1;
+    public static final int INDEX_WEATHER_CONDITION_ID = 2;
+    public static final int INDEX_WEATHER_MIN_TEMP = 3;
+    public static final int INDEX_WEATHER_MAX_TEMP = 4;
+    public static final int INDEX_WEATHER_HUMIDITY = 5;
+    public static final int INDEX_WEATHER_PRESSURE = 6;
+    public static final int INDEX_WEATHER_WIND_SPEED = 7;
+    public static final int INDEX_WEATHER_DEGREES = 8;
+
 
     /*
      * This ID will be used to identify the Loader responsible for loading the weather details

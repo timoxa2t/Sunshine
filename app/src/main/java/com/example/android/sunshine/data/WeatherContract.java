@@ -83,6 +83,8 @@ public class WeatherContract {
          * local time at midnight, as all we have to do is add a particular time zone's GMT
          * offset to this date to get local time at midnight on the appropriate date.
          */
+        public static final String COLUMN_ID = "_id";
+
         public static final String COLUMN_DATE = "date";
 
         /* Weather ID as returned by API, used to identify the icon to be used */
