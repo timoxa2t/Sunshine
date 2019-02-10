@@ -18,6 +18,7 @@ package com.example.android.sunshine;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -145,6 +146,8 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
             case VIEW_TYPE_TODAY:
                 weatherImageId = SunshineWeatherUtils
                         .getLargeArtResourceIdForWeatherCondition(weatherId);
+
+                initDailyWeatherList(forecastAdapterViewHolder, position);
                 break;
 
             case VIEW_TYPE_FUTURE_DAY:
@@ -213,6 +216,15 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         forecastAdapterViewHolder.lowTempView.setContentDescription(lowA11y);
     }
 
+    private void initDailyWeatherList(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
+        DailyWeatherAdapter adapter = new DailyWeatherAdapter();
+        forecastAdapterViewHolder.recyclerView.setAdapter(adapter);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
+        ((LinearLayoutManager) manager).setOrientation(LinearLayoutManager.HORIZONTAL);
+        forecastAdapterViewHolder.recyclerView.setLayoutManager(manager);
+        adapter.setList(mWeatherList.get(position), mContext);
+    }
+
     /**
      * This method simply returns the number of items to display. It is used behind the scenes
      * to help layout our Views and for animations.
@@ -262,6 +274,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         final TextView descriptionView;
         final TextView highTempView;
         final TextView lowTempView;
+        final RecyclerView recyclerView;
 
         ForecastAdapterViewHolder(View view) {
             super(view);
@@ -271,6 +284,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
             descriptionView = (TextView) view.findViewById(R.id.weather_description);
             highTempView = (TextView) view.findViewById(R.id.high_temperature);
             lowTempView = (TextView) view.findViewById(R.id.low_temperature);
+            recyclerView = (RecyclerView) view.findViewById(R.id.daily_weather_list);
 
             view.setOnClickListener(this);
         }
