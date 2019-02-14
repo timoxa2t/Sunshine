@@ -27,9 +27,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.data.DayWeatherData;
+import com.example.android.sunshine.data.WeatherUnit;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -222,6 +224,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
         ((LinearLayoutManager) manager).setOrientation(LinearLayoutManager.HORIZONTAL);
         forecastAdapterViewHolder.recyclerView.setLayoutManager(manager);
+
         adapter.setList(mWeatherList.get(position), mContext);
     }
 

@@ -39,10 +39,12 @@ import com.example.android.sunshine.data.DayWeatherData;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.data.WeatherUnit;
+import com.example.android.sunshine.sync.SunshineSyncTask;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.NetworkUtils;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
@@ -246,19 +248,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if(!data.moveToFirst()) return;
-        for(int i = 0; i < data.getColumnCount(); i++){
-            int type = data.getType(i);
-            if (type == Cursor.FIELD_TYPE_BLOB) {
-                Log.d("CursorTag", data.getColumnName(i) + " = " + data.getBlob(i));
-            }else    if (type == Cursor.FIELD_TYPE_FLOAT) {
-                Log.d("CursorTag", data.getColumnName(i) + " = " + data.getFloat(i));
-            }else    if (type == Cursor.FIELD_TYPE_INTEGER) {
-                Log.d("CursorTag", data.getColumnName(i) + " = " + data.getInt(i));
-            }else   if (type == Cursor.FIELD_TYPE_STRING) {
-                Log.d("CursorTag", data.getColumnName(i) + " = " + data.getString(i));
-            }
+        if(!data.moveToFirst()) {
+            SunshineSyncTask.syncWeather(this);
+            restartLoader();
+            return;
         }
+
+
         List<WeatherUnit> weatherUnits = WeatherUnit.parseCursorToWeatherUnits(data);
         List<DayWeatherData> dayWeatherData = DayWeatherData.initializeWeatherList(weatherUnits);
         mForecastAdapter.swapList(dayWeatherData);
@@ -378,6 +374,9 @@ public class MainActivity extends AppCompatActivity implements
 
         if(isNetworkAvalable && NetworkUtils.checkIfDataAvalable()) {
             this.getSupportLoaderManager().restartLoader(ID_FORECAST_LOADER, null, this);
+        }else{
+            Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show();
         }
+
     }
 }

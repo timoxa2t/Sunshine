@@ -24,7 +24,7 @@ public class DayWeatherData {
                 DayWeatherData daySummary = getSummaryData(list, normilizedDate);
                 summaryWeatherList.add(daySummary);
                 normilizedDate = unitNormilizedDate;
-                list.clear();
+                list = new ArrayList<>();
             }else if(unitNormilizedDate == normilizedDate){
                 list.add(unit);
             }
