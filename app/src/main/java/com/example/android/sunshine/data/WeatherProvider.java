@@ -224,14 +224,17 @@ public class WeatherProvider extends ContentProvider {
                  * represents the number of seconds since the epoch, or UTC time.
                  */
                 String normalizedUtcDateString = uri.getLastPathSegment();
+                long normalizedDate;
 
+                try {
+                    normalizedDate = Long.valueOf(normalizedUtcDateString);
+                } catch (NumberFormatException e){ return null; }
                 /*
                  * The query method accepts a string array of arguments, as there may be more
                  * than one "?" in the selection statement. Even though in our case, we only have
                  * one "?", we have to create a string array that only contains one element
                  * because this method signature accepts a string array.
                  */
-                String[] selectionArguments = new String[]{normalizedUtcDateString};
 
                 cursor = mOpenHelper.getReadableDatabase().query(
                         /* Table we are going to query */
@@ -252,8 +255,8 @@ public class WeatherProvider extends ContentProvider {
                          * within the selectionArguments array will be inserted into the
                          * selection statement by SQLite under the hood.
                          */
-                        WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ",
-                        selectionArguments,
+                        WeatherContract.WeatherEntry.getSqlSelectForSpecificDate(normalizedDate),
+                        null,
                         null,
                         null,
                         sortOrder);

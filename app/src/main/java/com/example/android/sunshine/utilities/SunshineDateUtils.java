@@ -179,7 +179,6 @@ public final class SunshineDateUtils {
      * For all days after that: "Mon, Jun 8" (Mon, 8 Jun in UK, for example)
      *
      * @param context               Context to use for resource localization
-     * @param normalizedUtcMidnight The date in milliseconds (UTC midnight)
      * @param showFullDate          Used to show a fuller-version of the date, which always
      *                              contains either the day of the week, today, or tomorrow, in
      *                              addition to the date.

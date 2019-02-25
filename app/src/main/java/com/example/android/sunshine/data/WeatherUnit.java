@@ -1,13 +1,10 @@
 package com.example.android.sunshine.data;
 
 import android.database.Cursor;
-import android.icu.util.Calendar;
 
 import com.example.android.sunshine.DetailActivity;
-import com.example.android.sunshine.MainActivity;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 public class WeatherUnit {
@@ -16,7 +13,7 @@ public class WeatherUnit {
         if (!cursor.moveToFirst()) return null;
 
         List<WeatherUnit> weatherList = new ArrayList<>();
-        while (cursor.moveToNext()) {
+        do {
             long dateInMillis = cursor.getLong(DetailActivity.INDEX_WEATHER_DATE);
             double pressure = cursor.getDouble(DetailActivity.INDEX_WEATHER_PRESSURE);
             int humidity = cursor.getInt(DetailActivity.INDEX_WEATHER_HUMIDITY);
@@ -35,7 +32,7 @@ public class WeatherUnit {
                     lowInCelsius,
                     weatherId);
             weatherList.add(unit);
-        }
+        }while (cursor.moveToNext());
 
         return weatherList;
     }

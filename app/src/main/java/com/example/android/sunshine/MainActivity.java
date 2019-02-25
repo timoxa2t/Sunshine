@@ -38,13 +38,12 @@ import android.widget.Toast;
 import com.example.android.sunshine.data.DayWeatherData;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
+import com.example.android.sunshine.data.WeatherProvider;
 import com.example.android.sunshine.data.WeatherUnit;
 import com.example.android.sunshine.sync.SunshineSyncTask;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.NetworkUtils;
 
-import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
@@ -220,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements
                  */
                 String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
 
-                Log.d("LogCursor", "Selection = " + selection);
 
                 return new CursorLoader(this,
                         forecastQueryUri,

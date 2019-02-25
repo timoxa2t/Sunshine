@@ -9,6 +9,7 @@ public class DayWeatherData {
 
 
     private List<WeatherUnit> mDayWeatherList;
+    private static boolean today = true;
 
     public static List<DayWeatherData> initializeWeatherList(List<WeatherUnit> weatherList){
         List<DayWeatherData> summaryWeatherList = new ArrayList<>();
@@ -25,10 +26,12 @@ public class DayWeatherData {
                 summaryWeatherList.add(daySummary);
                 normilizedDate = unitNormilizedDate;
                 list = new ArrayList<>();
+                today = false;
             }else if(unitNormilizedDate == normilizedDate){
                 list.add(unit);
             }
         }
+        summaryWeatherList.add(getSummaryData(list, normilizedDate));
         return summaryWeatherList;
     }
 
@@ -56,6 +59,8 @@ public class DayWeatherData {
                 minLow = item.getLow();
             }
         }
+
+        if(!today) {list = null;}
 
         return new DayWeatherData(
                 dayInMillis,

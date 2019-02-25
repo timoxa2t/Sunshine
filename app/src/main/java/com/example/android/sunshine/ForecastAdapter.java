@@ -16,7 +16,6 @@
 package com.example.android.sunshine;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,11 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.data.DayWeatherData;
-import com.example.android.sunshine.data.WeatherUnit;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**

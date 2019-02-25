@@ -25,14 +25,22 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.android.sunshine.data.DayWeatherData;
 import com.example.android.sunshine.data.WeatherContract;
+import com.example.android.sunshine.data.WeatherProvider;
+import com.example.android.sunshine.data.WeatherUnit;
 import com.example.android.sunshine.databinding.ActivityDetailBinding;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
+
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -74,6 +82,7 @@ public class DetailActivity extends AppCompatActivity implements
     public static final int INDEX_WEATHER_DEGREES = 8;
 
 
+
     /*
      * This ID will be used to identify the Loader responsible for loading the weather details
      * for a particular day. In some cases, one Activity can deal with many Loaders. However, in
@@ -88,6 +97,9 @@ public class DetailActivity extends AppCompatActivity implements
 
     /* The URI that is used to access the chosen day's weather details */
     private Uri mUri;
+
+    private RecyclerView mRecView;
+    private DailyWeatherAdapter mAdapter;
 
 
     /*
@@ -106,10 +118,16 @@ public class DetailActivity extends AppCompatActivity implements
 
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mRecView = mDetailBinding.detailWeatherListLayout.detailActivityWeatherList;
+        mAdapter = new DailyWeatherAdapter();
+        mRecView.setLayoutManager(manager);
+
         mUri = getIntent().getData();
         if (mUri == null) throw new NullPointerException("URI for DetailActivity cannot be null");
 
-        /* This connects our Activity into the loader lifecycle. */
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
     }
 
@@ -240,13 +258,29 @@ public class DetailActivity extends AppCompatActivity implements
             return;
         }
 
+
+        List<WeatherUnit> weatherUnitList = WeatherUnit.parseCursorToWeatherUnits(data);
+        Log.d("DetailTag", weatherUnitList.size() + "");
+        List<DayWeatherData> dayWeatherDataList = DayWeatherData.initializeWeatherList(weatherUnitList);
+        Log.d("DetailTag", dayWeatherDataList.size() + "");
+
+
+        if(dayWeatherDataList.size() < 1) return;
+        DayWeatherData dayWeatherData = dayWeatherDataList.get(0);
+        mAdapter.setList(dayWeatherData, this);
+        mRecView.setAdapter(mAdapter);
+
+
         /****************
          * Weather Icon *
          ****************/
         /* Read weather condition ID from the cursor (ID provided by Open Weather Map) */
-        int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
+        int weatherId = dayWeatherData.getClosestWeatherId();
         /* Use our utility method to determine the resource ID for the proper art */
         int weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+
+
+
 
         /* Set the resource ID on the icon to display the art */
         mDetailBinding.primaryInfo.weatherIcon.setImageResource(weatherImageId);
@@ -263,7 +297,7 @@ public class DetailActivity extends AppCompatActivity implements
          * the date representation for the local date in local time.
          * SunshineDateUtils#getFriendlyDateString takes care of this for us.
          */
-        long localDateMidnightGmt = data.getLong(INDEX_WEATHER_DATE);
+        long localDateMidnightGmt = dayWeatherData.getDayInMillis();
         String dateText = SunshineDateUtils.getFriendlyDateString(this, localDateMidnightGmt, true);
 
         mDetailBinding.primaryInfo.date.setText(dateText);
@@ -288,7 +322,7 @@ public class DetailActivity extends AppCompatActivity implements
          * High (max) temperature *
          **************************/
         /* Read high temperature from the cursor (in degrees celsius) */
-        double highInCelsius = data.getDouble(INDEX_WEATHER_MAX_TEMP);
+        double highInCelsius = dayWeatherData.getMaxHigh();
         /*
          * If the user's preference for weather is fahrenheit, formatTemperature will convert
          * the temperature. This method will also append either °C or °F to the temperature
@@ -307,7 +341,7 @@ public class DetailActivity extends AppCompatActivity implements
          * Low (min) temperature *
          *************************/
         /* Read low temperature from the cursor (in degrees celsius) */
-        double lowInCelsius = data.getDouble(INDEX_WEATHER_MIN_TEMP);
+        double lowInCelsius = dayWeatherData.getMinLow();
         /*
          * If the user's preference for weather is fahrenheit, formatTemperature will convert
          * the temperature. This method will also append either °C or °F to the temperature
@@ -325,7 +359,7 @@ public class DetailActivity extends AppCompatActivity implements
          * Humidity *
          ************/
         /* Read humidity from the cursor */
-        float humidity = data.getFloat(INDEX_WEATHER_HUMIDITY);
+        float humidity = dayWeatherData.getHumiditySummary();
         String humidityString = getString(R.string.format_humidity, humidity);
 
         String humidityA11y = getString(R.string.a11y_humidity, humidityString);
@@ -340,8 +374,8 @@ public class DetailActivity extends AppCompatActivity implements
          * Wind speed and direction *
          ****************************/
         /* Read wind speed (in MPH) and direction (in compass degrees) from the cursor  */
-        float windSpeed = data.getFloat(INDEX_WEATHER_WIND_SPEED);
-        float windDirection = data.getFloat(INDEX_WEATHER_DEGREES);
+        double windSpeed = dayWeatherData.getMaxWindSpeed();
+        double windDirection = dayWeatherData.getClosestWindDirection();
         String windString = SunshineWeatherUtils.getFormattedWind(this, windSpeed, windDirection);
 
         String windA11y = getString(R.string.a11y_wind, windString);
@@ -356,7 +390,7 @@ public class DetailActivity extends AppCompatActivity implements
          * Pressure *
          ************/
         /* Read pressure from the cursor */
-        float pressure = data.getFloat(INDEX_WEATHER_PRESSURE);
+        double pressure = dayWeatherData.getPressureSummary();
 
         /*
          * Format the pressure text using string resources. The reason we directly access

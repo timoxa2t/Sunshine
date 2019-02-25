@@ -53,7 +53,7 @@ public final class NetworkUtils {
 
     private static final String API_KEY_PARAM = "APPID";
     //TODO reaplace <MyKey> with your key from OpenWeatherMap Api
-    private static final String API_KEY = "<My key>";
+    private static final String API_KEY = "6e365cd354b5673fe69de5bd1a2c1807";
     /* The format we want our API to return */
     private static final String format = "json";
     /* The units we want our API to return */
