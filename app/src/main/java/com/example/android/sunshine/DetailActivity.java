@@ -119,7 +119,7 @@ public class DetailActivity extends AppCompatActivity implements
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         mRecView = mDetailBinding.detailWeatherListLayout.detailActivityWeatherList;
         mAdapter = new DailyWeatherAdapter();
@@ -260,11 +260,10 @@ public class DetailActivity extends AppCompatActivity implements
 
 
         List<WeatherUnit> weatherUnitList = WeatherUnit.parseCursorToWeatherUnits(data);
-        Log.d("DetailTag", weatherUnitList.size() + "");
         List<DayWeatherData> dayWeatherDataList = DayWeatherData.initializeWeatherList(weatherUnitList);
+
+
         Log.d("DetailTag", dayWeatherDataList.size() + "");
-
-
         if(dayWeatherDataList.size() < 1) return;
         DayWeatherData dayWeatherData = dayWeatherDataList.get(0);
         mAdapter.setList(dayWeatherData, this);

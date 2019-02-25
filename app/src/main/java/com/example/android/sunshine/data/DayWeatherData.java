@@ -1,5 +1,7 @@
 package com.example.android.sunshine.data;
 
+import android.util.Log;
+
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 
 import java.util.ArrayList;
@@ -9,9 +11,10 @@ public class DayWeatherData {
 
 
     private List<WeatherUnit> mDayWeatherList;
-    private static boolean today = true;
+    private static boolean today;
 
     public static List<DayWeatherData> initializeWeatherList(List<WeatherUnit> weatherList){
+        today = true;
         List<DayWeatherData> summaryWeatherList = new ArrayList<>();
         if(weatherList.size() < 1) return null;
         long date = weatherList.get(0).getDateTimeMillis();
@@ -32,6 +35,7 @@ public class DayWeatherData {
             }
         }
         summaryWeatherList.add(getSummaryData(list, normilizedDate));
+        Log.d("DayWeatherDataTag", "WeatherUnit list size "  + list.size());
         return summaryWeatherList;
     }
 
