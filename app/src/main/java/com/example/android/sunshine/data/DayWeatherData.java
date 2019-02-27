@@ -63,6 +63,8 @@ public class DayWeatherData {
                 minLow = item.getLow();
             }
         }
+        pressureSummary /= list.size();
+        humiditySummary /= list.size();
 
         if(!today) {list = null;}
 

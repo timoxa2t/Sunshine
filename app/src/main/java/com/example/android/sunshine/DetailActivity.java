@@ -43,7 +43,8 @@ import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>
+        , DailyWeatherAdapter.DailyWeatherOnClickHandler{
 
     /*
      * In this Activity, you can share the selected day's forecast. No social sharing is complete
@@ -266,7 +267,7 @@ public class DetailActivity extends AppCompatActivity implements
         Log.d("DetailTag", dayWeatherDataList.size() + "");
         if(dayWeatherDataList.size() < 1) return;
         DayWeatherData dayWeatherData = dayWeatherDataList.get(0);
-        mAdapter.setList(dayWeatherData, this);
+        mAdapter.setList(dayWeatherData, this, this);
         mRecView.setAdapter(mAdapter);
 
 
@@ -422,5 +423,81 @@ public class DetailActivity extends AppCompatActivity implements
      */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void onClick(WeatherUnit unit) {
+
+        int weatherId = unit.getWeatherId();
+        int weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+
+        mDetailBinding.primaryInfo.weatherIcon.setImageResource(weatherImageId);
+
+        long localDateMidnightGmt = unit.getDateTimeMillis();
+        String dateText = SunshineDateUtils.getFriendlyDateString(this, localDateMidnightGmt, true);
+
+        mDetailBinding.primaryInfo.date.setText(dateText);
+
+        String description = SunshineWeatherUtils.getStringForWeatherCondition(this, weatherId);
+
+        String descriptionA11y = getString(R.string.a11y_forecast, description);
+
+        mDetailBinding.primaryInfo.weatherDescription.setText(description);
+        mDetailBinding.primaryInfo.weatherDescription.setContentDescription(descriptionA11y);
+
+        mDetailBinding.primaryInfo.weatherIcon.setContentDescription(descriptionA11y);
+
+
+        double highInCelsius = unit.getHigh();
+
+        String highString = SunshineWeatherUtils.formatTemperature(this, highInCelsius);
+
+        String highA11y = getString(R.string.a11y_high_temp, highString);
+
+        mDetailBinding.primaryInfo.highTemperature.setText(highString);
+        mDetailBinding.primaryInfo.highTemperature.setContentDescription(highA11y);
+
+        double lowInCelsius = unit.getLow();
+
+        String lowString = SunshineWeatherUtils.formatTemperature(this, lowInCelsius);
+
+        String lowA11y = getString(R.string.a11y_low_temp, lowString);
+
+        mDetailBinding.primaryInfo.lowTemperature.setText(lowString);
+        mDetailBinding.primaryInfo.lowTemperature.setContentDescription(lowA11y);
+
+        float humidity = unit.getHumidity();
+        String humidityString = getString(R.string.format_humidity, humidity);
+
+        String humidityA11y = getString(R.string.a11y_humidity, humidityString);
+
+        mDetailBinding.extraDetails.humidity.setText(humidityString);
+        mDetailBinding.extraDetails.humidity.setContentDescription(humidityA11y);
+
+        mDetailBinding.extraDetails.humidityLabel.setContentDescription(humidityA11y);
+
+        double windSpeed = unit.getWindSpeed();
+        double windDirection = unit.getWindDirection();
+        String windString = SunshineWeatherUtils.getFormattedWind(this, windSpeed, windDirection);
+
+        String windA11y = getString(R.string.a11y_wind, windString);
+
+        mDetailBinding.extraDetails.windMeasurement.setText(windString);
+        mDetailBinding.extraDetails.windMeasurement.setContentDescription(windA11y);
+
+        mDetailBinding.extraDetails.windLabel.setContentDescription(windA11y);
+
+
+        double pressure = unit.getPressure();
+        String pressureString = getString(R.string.format_pressure, pressure);
+
+        String pressureA11y = getString(R.string.a11y_pressure, pressureString);
+
+        mDetailBinding.extraDetails.pressure.setText(pressureString);
+        mDetailBinding.extraDetails.pressure.setContentDescription(pressureA11y);
+        mDetailBinding.extraDetails.pressureLabel.setContentDescription(pressureA11y);
+        mForecastSummary = String.format("%s - %s - %s/%s",
+                dateText, description, highString, lowString);
+
     }
 }

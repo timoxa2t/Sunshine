@@ -22,6 +22,9 @@ public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapte
 
     List<WeatherUnit> mWeatherList;
     Context mContext;
+    DailyWeatherOnClickHandler mClickHandler;
+    private ImageView mSelectedFrameView = null;
+
 
     @NonNull
     @Override
@@ -63,12 +66,24 @@ public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapte
         notifyDataSetChanged();
     }
 
-    class DailyWeatherViewHolder extends RecyclerView.ViewHolder{
+    public void setList(DayWeatherData dayWeatherData, Context context, DailyWeatherOnClickHandler handler) {
+        mContext = context;
+        mWeatherList = dayWeatherData.getmDayWeatherList();
+        mClickHandler = handler;
+        notifyDataSetChanged();
+    }
+
+    public interface DailyWeatherOnClickHandler{
+        void onClick(WeatherUnit unit);
+    }
+
+    class DailyWeatherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView time;
         final ImageView weatherIcon;
         final TextView weatherDescription;
-        final TextView highLowTemp;;
+        final TextView highLowTemp;
+        final ImageView frameView;
 
 
         public DailyWeatherViewHolder(@NonNull View itemView) {
@@ -77,6 +92,21 @@ public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapte
             weatherIcon = (ImageView) itemView.findViewById(R.id.weather_icon);
             weatherDescription = (TextView) itemView.findViewById(R.id.weather_description);
             highLowTemp = (TextView) itemView.findViewById(R.id.high_slash_low_temperature);
+            frameView = (ImageView) itemView.findViewById(R.id.frame_iv);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(mClickHandler == null) return;
+            int position = getAdapterPosition();
+            if(mSelectedFrameView != null) {
+                mSelectedFrameView.setBackground(mContext.getDrawable(R.drawable.frame));
+            }
+            mSelectedFrameView = frameView;
+            mSelectedFrameView.setBackground(mContext.getDrawable(R.drawable.frame_selected));
+            WeatherUnit weatherUnit = mWeatherList.get(position);
+            mClickHandler.onClick(weatherUnit);
         }
     }
 
