@@ -216,7 +216,7 @@ public class DetailActivity extends AppCompatActivity implements
 
                 return new CursorLoader(this,
                         mUri,
-                        WEATHER_DETAIL_PROJECTION,
+                        null,
                         null,
                         null,
                         null);

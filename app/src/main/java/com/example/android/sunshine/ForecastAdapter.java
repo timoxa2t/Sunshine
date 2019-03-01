@@ -19,6 +19,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.data.DayWeatherData;
+import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 
@@ -145,7 +147,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
             case VIEW_TYPE_TODAY:
                 weatherImageId = SunshineWeatherUtils
                         .getLargeArtResourceIdForWeatherCondition(weatherId);
-
+                setCityName(forecastAdapterViewHolder);
                 initDailyWeatherList(forecastAdapterViewHolder, position);
                 break;
 
@@ -215,6 +217,11 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         forecastAdapterViewHolder.lowTempView.setContentDescription(lowA11y);
     }
 
+    private void setCityName(ForecastAdapterViewHolder forecastAdapterViewHolder) {
+        String cityName = SunshinePreferences.getCityName(mContext);
+        forecastAdapterViewHolder.cityName.setText(cityName);
+    }
+
     private void initDailyWeatherList(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
         DailyWeatherAdapter adapter = new DailyWeatherAdapter();
         forecastAdapterViewHolder.recyclerView.setAdapter(adapter);
@@ -262,6 +269,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         notifyDataSetChanged();
     }
 
+
     /**
      * A ViewHolder is a required part of the pattern for RecyclerViews. It mostly behaves as
      * a cache of the child views for a forecast item. It's also a convenient place to set an
@@ -274,7 +282,9 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         final TextView descriptionView;
         final TextView highTempView;
         final TextView lowTempView;
+
         final RecyclerView recyclerView;
+        final TextView cityName;
 
         ForecastAdapterViewHolder(View view) {
             super(view);
@@ -284,7 +294,10 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
             descriptionView = (TextView) view.findViewById(R.id.weather_description);
             highTempView = (TextView) view.findViewById(R.id.high_temperature);
             lowTempView = (TextView) view.findViewById(R.id.low_temperature);
+
             recyclerView = (RecyclerView) view.findViewById(R.id.daily_weather_list);
+            cityName = view.findViewById(R.id.city_name);
+
 
             view.setOnClickListener(this);
         }

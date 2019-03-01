@@ -15,15 +15,20 @@
  */
 package com.example.android.sunshine;
 
+import android.Manifest;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.content.PermissionChecker;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,7 +53,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        ForecastAdapter.ForecastAdapterOnClickHandler {
+        ForecastAdapter.ForecastAdapterOnClickHandler, SwipeRefreshLayout.OnRefreshListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -82,12 +87,14 @@ public class MainActivity extends AppCompatActivity implements
      * it is unique and consistent.
      */
     private static final int ID_FORECAST_LOADER = 44;
+    private static final int PERMISSION_REQUEST_CODE = 0;
 
     private ForecastAdapter mForecastAdapter;
     private RecyclerView mRecyclerView;
     private int mPosition = RecyclerView.NO_POSITION;
 
     private ProgressBar mLoadingIndicator;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override
@@ -95,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
         getSupportActionBar().setElevation(0f);
+        checkPermissions();
+
+
 
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
@@ -155,6 +165,9 @@ public class MainActivity extends AppCompatActivity implements
 
         showLoading();
 
+        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         /*
          * Ensures a loader is initialized and active. If the loader doesn't already exist, one is
          * created and (if the activity/fragment is currently started) starts the loader. Otherwise
@@ -163,6 +176,21 @@ public class MainActivity extends AppCompatActivity implements
         SunshineSyncUtils.initialize(this);
 
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
+
+    }
+
+    private void checkPermissions() {
+        int accessFineLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int accessCoarseLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        String[] permissionsToRequest = new String[2];
+        if(accessFineLocation != PermissionChecker.PERMISSION_GRANTED
+                || accessCoarseLocation != PermissionChecker.PERMISSION_GRANTED){
+            permissionsToRequest[0] = Manifest.permission.ACCESS_FINE_LOCATION;
+            permissionsToRequest[1] = Manifest.permission.ACCESS_COARSE_LOCATION;
+        }else return;
+
+        ActivityCompat.requestPermissions(this, permissionsToRequest,  PERMISSION_REQUEST_CODE);
 
     }
 
@@ -247,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if(!data.moveToFirst()) {
-            SunshineSyncTask.syncWeather(this);
+            SunshineSyncUtils.startImmediateSync(this);
             restartLoader();
             return;
         }
@@ -365,16 +393,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void restartLoader(){
-        //check if device has internet connection
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-        boolean isNetworkAvalable = info != null && info.isConnected();
+        this.getSupportLoaderManager().restartLoader(ID_FORECAST_LOADER, null, this);
+    }
 
-        if(isNetworkAvalable && NetworkUtils.checkIfDataAvalable()) {
-            this.getSupportLoaderManager().restartLoader(ID_FORECAST_LOADER, null, this);
-        }else{
-            Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onRefresh() {
+        SunshineSyncUtils.startImmediateSync(this);
+        restartLoader();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }

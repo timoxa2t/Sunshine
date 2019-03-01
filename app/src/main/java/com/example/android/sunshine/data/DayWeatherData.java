@@ -2,6 +2,7 @@ package com.example.android.sunshine.data;
 
 import android.util.Log;
 
+import com.example.android.sunshine.R;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 
 import java.util.ArrayList;

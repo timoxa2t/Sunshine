@@ -17,6 +17,8 @@ package com.example.android.sunshine.utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -38,6 +40,7 @@ public final class OpenWeatherJsonUtils {
     /* Location information */
     private static final String OWM_CITY = "city";
     private static final String OWM_COORD = "coord";
+    private static final String OWM_NAME = "name";
 
     /* Location coordinate */
     private static final String OWM_LATITUDE = "lat";
@@ -108,7 +111,9 @@ public final class OpenWeatherJsonUtils {
         double cityLatitude = cityCoord.getDouble(OWM_LATITUDE);
         double cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
 
-        SunshinePreferences.setLocationDetails(context, cityLatitude, cityLongitude);
+        String cityName = cityJson.getString(OWM_NAME);
+
+        SunshinePreferences.setLocationDetails(context, cityLatitude, cityLongitude, cityName);
 
         ContentValues[] weatherContentValues = new ContentValues[jsonWeatherArray.length()];
 
@@ -177,6 +182,7 @@ public final class OpenWeatherJsonUtils {
 
             weatherContentValues[i] = weatherValues;
         }
+
 
         return weatherContentValues;
     }

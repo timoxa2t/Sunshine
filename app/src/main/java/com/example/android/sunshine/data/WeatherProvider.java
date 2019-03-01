@@ -245,7 +245,7 @@ public class WeatherProvider extends ContentProvider {
                          * However, if you don't need all the data from the table, it's best
                          * practice to limit the columns returned in the Cursor with a projection.
                          */
-                        null,
+                        projection,
                         /*
                          * The URI that matches CODE_WEATHER_WITH_DATE contains a date at the end
                          * of it. We extract that date and use it with these next two lines to

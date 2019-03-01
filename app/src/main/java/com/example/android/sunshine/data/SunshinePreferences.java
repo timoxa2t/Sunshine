@@ -35,6 +35,7 @@ public final class SunshinePreferences {
      */
     public static final String PREF_COORD_LAT = "coord_lat";
     public static final String PREF_COORD_LONG = "coord_long";
+    public static final String PREF_CITY_NAME = "city_name";
 
     /**
      * Helper method to handle setting location details in Preferences (city name, latitude,
@@ -46,12 +47,13 @@ public final class SunshinePreferences {
      * @param lat      the latitude of the city
      * @param lon      the longitude of the city
      */
-    public static void setLocationDetails(Context context, double lat, double lon) {
+    public static void setLocationDetails(Context context, double lat, double lon, String cityName) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
 
         editor.putLong(PREF_COORD_LAT, Double.doubleToRawLongBits(lat));
         editor.putLong(PREF_COORD_LONG, Double.doubleToRawLongBits(lon));
+        editor.putString(PREF_CITY_NAME, cityName);
         editor.apply();
     }
 
@@ -66,6 +68,7 @@ public final class SunshinePreferences {
 
         editor.remove(PREF_COORD_LAT);
         editor.remove(PREF_COORD_LONG);
+        editor.remove(PREF_CITY_NAME);
         editor.apply();
     }
 
@@ -131,8 +134,11 @@ public final class SunshinePreferences {
          * Double.longBitsToDouble does the opposite, converting a long (that represents a double)
          * into the double itself.
          */
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        int accessFineLocation = ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+        int accessCoarseLocation = ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (accessFineLocation == PackageManager.PERMISSION_GRANTED
+                && accessCoarseLocation == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             if(location != null) {
@@ -169,6 +175,14 @@ public final class SunshinePreferences {
 
         return spContainBothLatitudeAndLongitude;
     }
+
+    public static String getCityName(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String cityName = preferences.getString(PREF_CITY_NAME, context.getString(R.string.pref_city_name_default));
+        return cityName;
+    }
+
+
 
     /**
      * Returns true if the user prefers to see notifications from Sunshine, false otherwise. This
